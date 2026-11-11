@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Capistrano" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=neo\sqlexpress;Initial Catalog=Capistrano;Integrated Security=True;Trust Server Certificate=True" SettingsObjectName="NIDEOUS_CRUDVERSION2.Properties.Settings" SettingsPropertyName="CapistranoConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Categories" Member="Categories">
+    <Type Name="Category">
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="Category_Product" Member="Products" ThisKey="CategoryId" OtherKey="CategoryId" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Product">
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SKU" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitCost" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ReorderLevel" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StockOnHand" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Product_PurchaseOrderLine" Member="PurchaseOrderLines" ThisKey="ProductId" OtherKey="ProductId" Type="PurchaseOrderLine" />
+      <Association Name="Product_StockMovement" Member="StockMovements" ThisKey="ProductId" OtherKey="ProductId" Type="StockMovement" />
+      <Association Name="Category_Product" Member="Category" ThisKey="CategoryId" OtherKey="CategoryId" Type="Category" IsForeignKey="true" />
+      <Association Name="Supplier1_Product" Member="Supplier1" ThisKey="SupplierId" OtherKey="SupplierId" Type="Supplier1" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseOrderLines" Member="PurchaseOrderLines">
+    <Type Name="PurchaseOrderLine">
+      <Column Name="POLineId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseOrderId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitCost" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="Product_PurchaseOrderLine" Member="Product" ThisKey="ProductId" OtherKey="ProductId" Type="Product" IsForeignKey="true" />
+      <Association Name="PurchaseOrder_PurchaseOrderLine" Member="PurchaseOrder" ThisKey="PurchaseOrderId" OtherKey="PurchaseOrderId" Type="PurchaseOrder" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseOrders" Member="PurchaseOrders">
+    <Type Name="PurchaseOrder">
+      <Column Name="PurchaseOrderId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PONumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrderDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="POStatus" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="PurchaseOrder_PurchaseOrderLine" Member="PurchaseOrderLines" ThisKey="PurchaseOrderId" OtherKey="PurchaseOrderId" Type="PurchaseOrderLine" />
+      <Association Name="Supplier1_PurchaseOrder" Member="Supplier1" ThisKey="SupplierId" OtherKey="SupplierId" Type="Supplier1" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StockMovements" Member="StockMovements">
+    <Type Name="StockMovement">
+      <Column Name="MovementId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MovementType" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReferenceNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MovementDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_StockMovement" Member="Product" ThisKey="ProductId" OtherKey="ProductId" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Suppliers" Member="Supplier1s">
+    <Type Name="Supplier1">
+      <Column Name="SupplierId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SupplierCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactEmail" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierStatus" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Association Name="Supplier1_Product" Member="Products" ThisKey="SupplierId" OtherKey="SupplierId" Type="Product" />
+      <Association Name="Supplier1_PurchaseOrder" Member="PurchaseOrders" ThisKey="SupplierId" OtherKey="SupplierId" Type="PurchaseOrder" />
+    </Type>
+  </Table>
+  <Function Name="dbo.usp_Inventory_LowStockReport" Method="usp_Inventory_LowStockReport">
+    <ElementType Name="usp_Inventory_LowStockReportResult">
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SKU" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="StockOnHand" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReorderLevel" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SuggestedReorderQty" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.usp_Supplier_CRUD" Method="usp_Supplier_CRUD">
+    <Parameter Name="Action" Parameter="action" Type="System.String" DbType="VarChar(10)" />
+    <Parameter Name="SupplierId" Parameter="supplierId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SupplierCode" Parameter="supplierCode" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="SupplierName" Parameter="supplierName" Type="System.String" DbType="VarChar(150)" />
+    <Parameter Name="ContactEmail" Parameter="contactEmail" Type="System.String" DbType="VarChar(150)" />
+    <Parameter Name="SupplierStatus" Parameter="supplierStatus" Type="System.String" DbType="VarChar(20)" />
+    <ElementType Name="usp_Supplier_CRUDResult">
+      <Column Name="SupplierId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactEmail" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierStatus" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.usp_Product_CRUD" Method="usp_Product_CRUD">
+    <Parameter Name="Action" Parameter="action" Type="System.String" DbType="VarChar(10)" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SKU" Parameter="sKU" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="ProductName" Parameter="productName" Type="System.String" DbType="VarChar(150)" />
+    <Parameter Name="CategoryId" Parameter="categoryId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SupplierId" Parameter="supplierId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UnitCost" Parameter="unitCost" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Parameter Name="ReorderLevel" Parameter="reorderLevel" Type="System.Int32" DbType="Int" />
+    <Parameter Name="StockOnHand" Parameter="stockOnHand" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IsActive" Parameter="isActive" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="SearchKeyword" Parameter="searchKeyword" Type="System.String" DbType="VarChar(100)" />
+    <ElementType Name="usp_Product_CRUDResult">
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SKU" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitCost" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ReorderLevel" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StockOnHand" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.usp_PurchaseOrder_AddLine" Method="usp_PurchaseOrder_AddLine">
+    <Parameter Name="PurchaseOrderId" Parameter="purchaseOrderId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Quantity" Parameter="quantity" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UnitCost" Parameter="unitCost" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.usp_PurchaseOrder_Receive" Method="usp_PurchaseOrder_Receive">
+    <Parameter Name="PurchaseOrderId" Parameter="purchaseOrderId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.usp_PurchaseOrder_CreateDraft" Method="usp_PurchaseOrder_CreateDraft">
+    <Parameter Name="PONumber" Parameter="pONumber" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="SupplierId" Parameter="supplierId" Type="System.Int32" DbType="Int" />
+    <ElementType Name="usp_PurchaseOrder_CreateDraftResult">
+      <Column Name="PurchaseOrderId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>
